@@ -1,5 +1,5 @@
 const express = require('express');
-const { createCanvas, loadImage } = require('canvas');
+const { createCanvas, loadImage } = require('@napi-rs/canvas');
 const app = express();
 
 app.get('/gen-image', async (req, res) => {
@@ -13,8 +13,11 @@ app.get('/gen-image', async (req, res) => {
     const canvas = createCanvas(width, height);
     const ctx = canvas.getContext('2d');
 
-    // พื้นหลังสีเดียวกับ Discord embed
-    ctx.fillStyle = '#2b2d31';
+    // พื้นหลังแบบ Discord Embed (gradient เทาเข้ม-น้ำเงินเทา)
+    const bgGradient = ctx.createLinearGradient(0, 0, width, height);
+    bgGradient.addColorStop(0, "#23272A");
+    bgGradient.addColorStop(1, "#2C2F35");
+    ctx.fillStyle = bgGradient;
     ctx.fillRect(0, 0, width, height);
 
     // กรอบโค้งมน
@@ -32,22 +35,22 @@ app.get('/gen-image', async (req, res) => {
     ctx.closePath();
     ctx.stroke();
 
-    // avatar circle
+    // avatar วงกลม
     try {
-        const avatarImg = await loadImage(avatar);
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(48, 64, 40, 0, Math.PI * 2, true);
-        ctx.closePath();
-        ctx.clip();
-        ctx.drawImage(avatarImg, 8, 24, 80, 80);
-        ctx.restore();
+    const avatarImg = await loadImage(avatar);
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(59, 64, 40, 0, Math.PI * 2, true); // X = 64 (ขวากว่าเดิม)
+    ctx.closePath();
+    ctx.clip();
+    ctx.drawImage(avatarImg, 19, 24, 80, 80);   // X = 24 (ขวากว่าเดิม)
+    ctx.restore();
     } catch (e) {
-        ctx.fillStyle = '#444';
-        ctx.beginPath();
-        ctx.arc(48, 64, 40, 0, Math.PI * 2, true);
-        ctx.closePath();
-        ctx.fill();
+    ctx.fillStyle = '#444';
+    ctx.beginPath();
+    ctx.arc(72, 64, 40, 0, Math.PI * 2, true); // X = 72
+    ctx.closePath();
+    ctx.fill();
     }
 
     // username
