@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require('express'); 
 const { createCanvas, loadImage } = require('@napi-rs/canvas');
 const app = express();
 
