@@ -1,5 +1,5 @@
-const express = require('express'); 
-const { createCanvas, loadImage, registerFont } = require('@napi-rs/canvas');
+const express = require('express');
+const { createCanvas, loadImage } = require('@napi-rs/canvas');
 const app = express();
 
 app.get('/gen-image', async (req, res) => {
@@ -13,84 +13,53 @@ app.get('/gen-image', async (req, res) => {
     const canvas = createCanvas(width, height);
     const ctx = canvas.getContext('2d');
 
-    // พื้นหลัง gradient
-    const bgGradient = ctx.createLinearGradient(0, 0, width, height);
-    bgGradient.addColorStop(0, "#23272A");
-    bgGradient.addColorStop(1, "#2b2d31");
-    ctx.fillStyle = bgGradient;
+    // พื้นหลังสีเดียวกับ Discord embed
+    ctx.fillStyle = '#2b2d31'; // หรือ '#23272A'
     ctx.fillRect(0, 0, width, height);
 
-    // กรอบโค้งมน + เงา
-    ctx.save();
-    ctx.shadowColor = "#111a";
-    ctx.shadowBlur = 12;
-    ctx.strokeStyle = "#444";
+    // กรอบโค้งมน
+    ctx.strokeStyle = '#222';
     ctx.lineWidth = 3;
     ctx.beginPath();
-    ctx.moveTo(16, 8);
-    ctx.arcTo(width - 8, 8, width - 8, height - 8, 24);
-    ctx.arcTo(width - 8, height - 8, 16, height - 8, 24);
-    ctx.arcTo(16, height - 8, 16, 8, 24);
-    ctx.arcTo(16, 8, width - 8, 8, 24);
+    ctx.moveTo(8, 16);
+    ctx.arcTo(8, 8, 16, 8, 8);
+    ctx.lineTo(width - 16, 8);
+    ctx.arcTo(width - 8, 8, width - 8, 16, 8);
+    ctx.lineTo(width - 8, height - 16);
+    ctx.arcTo(width - 8, height - 8, width - 16, height - 8, 8);
+    ctx.lineTo(16, height - 8);
+    ctx.arcTo(8, height - 8, 8, height - 16, 8);
     ctx.closePath();
     ctx.stroke();
-    ctx.restore();
 
-    // avatar วงกลม + เงา
+    // avatar circle
     try {
         const avatarImg = await loadImage(avatar);
         ctx.save();
         ctx.beginPath();
-        ctx.arc(64, 64, 48, 0, Math.PI * 2, true);
+        ctx.arc(48, 64, 40, 0, Math.PI * 2, true);
         ctx.closePath();
-        ctx.shadowColor = "#000a";
-        ctx.shadowBlur = 10;
         ctx.clip();
-        ctx.drawImage(avatarImg, 16, 16, 96, 96);
+        ctx.drawImage(avatarImg, 8, 24, 80, 80);
         ctx.restore();
     } catch (e) {
-        ctx.save();
+        ctx.fillStyle = '#444';
         ctx.beginPath();
-        ctx.arc(64, 64, 48, 0, Math.PI * 2, true);
+        ctx.arc(48, 64, 40, 0, Math.PI * 2, true);
         ctx.closePath();
-        ctx.fillStyle = "#444";
-        ctx.shadowColor = "#000a";
-        ctx.shadowBlur = 10;
         ctx.fill();
-        ctx.restore();
     }
 
-    // Username
-    ctx.save();
-    ctx.font = 'bold 32px Arial';
+    // username
+    ctx.font = 'bold 28px Arial';
     ctx.fillStyle = '#fff';
     ctx.textBaseline = 'top';
-    ctx.shadowColor = "#000a";
-    ctx.shadowBlur = 4;
-    ctx.fillText(`@${username}`, 130, 32);
-    ctx.restore();
+    ctx.fillText(`@${username}`, 110, 32);
 
-    // เงิน
-    ctx.save();
+    // cash
     ctx.font = 'bold 28px Arial';
     ctx.fillStyle = '#00FF66';
-    ctx.shadowColor = "#000a";
-    ctx.shadowBlur = 4;
-    ctx.fillText(`💸 $${Number(start).toLocaleString()} / $${Number(end).toLocaleString()}`, 130, 78);
-    ctx.restore();
-
-    // Badge "LEADERBOARD"
-    ctx.save();
-    ctx.font = 'bold 16px Arial';
-    ctx.fillStyle = '#5865F2';
-    ctx.globalAlpha = 0.85;
-    ctx.fillRect(width - 150, 16, 128, 32);
-    ctx.globalAlpha = 1;
-    ctx.fillStyle = '#fff';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('LEADERBOARD', width - 86, 32);
-    ctx.restore();
+    ctx.fillText(`$${Number(start).toLocaleString()} / $${Number(end).toLocaleString()}`, 110, 72);
 
     res.setHeader('Content-Type', 'image/png');
     res.end(canvas.toBuffer('image/png'));
