@@ -1,5 +1,5 @@
 const express = require('express');
-const { createCanvas, loadImage } = require('@napi-rs/canvas');
+const { createCanvas, loadImage } = require('canvas');
 const app = express();
 
 app.get('/gen-image', async (req, res) => {
@@ -14,7 +14,7 @@ app.get('/gen-image', async (req, res) => {
     const ctx = canvas.getContext('2d');
 
     // พื้นหลังสีเดียวกับ Discord embed
-    ctx.fillStyle = '#2b2d31'; // หรือ '#23272A'
+    ctx.fillStyle = '#2b2d31';
     ctx.fillRect(0, 0, width, height);
 
     // กรอบโค้งมน
