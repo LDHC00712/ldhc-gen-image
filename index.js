@@ -13,40 +13,6 @@ app.get('/gen-image', async (req, res) => {
     const canvas = createCanvas(width, height);
     const ctx = canvas.getContext('2d');
 
-        // พื้นหลัง checkerboard
-        ctx.fillStyle = '#18191c';
-        ctx.fillRect(0, 0, width, height);
-        const checkerSize = 24;
-        ctx.save();
-        ctx.globalAlpha = 0.08;
-        for (let y = 0; y < height; y += checkerSize) {
-            for (let x = 0; x < width; x += checkerSize) {
-                if ((x / checkerSize + y / checkerSize) % 2 === 0) {
-                    ctx.fillStyle = '#23272a';
-                    ctx.fillRect(x, y, checkerSize, checkerSize);
-                }
-            }
-        }
-        ctx.restore();
-
-    // เงาพื้นหลัง
-    ctx.save();
-    ctx.shadowColor = "#000a";
-    ctx.shadowBlur = 24;
-    ctx.fillStyle = "#23272A";
-    ctx.beginPath();
-    ctx.moveTo(8, 16);
-    ctx.arcTo(8, 8, 16, 8, 18);
-    ctx.lineTo(width - 16, 8);
-    ctx.arcTo(width - 8, 8, width - 8, 16, 18);
-    ctx.lineTo(width - 8, height - 16);
-    ctx.arcTo(width - 8, height - 8, width - 16, height - 8, 18);
-    ctx.lineTo(16, height - 8);
-    ctx.arcTo(8, height - 8, 8, height - 16, 18);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-
     // กรอบโค้งมนบางๆ
     ctx.save();
     ctx.strokeStyle = '#444';
