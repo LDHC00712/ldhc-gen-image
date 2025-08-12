@@ -13,9 +13,13 @@ app.get('/gen-image', async (req, res) => {
     const canvas = createCanvas(width, height);
     const ctx = canvas.getContext('2d');
 
-    // พื้นหลังสีเดียวกับ Discord embed
-    ctx.fillStyle = '#2b2d31'; // หรือ '#23272A' ก็ได้
-    ctx.fillRect(0, 0, width, height);
+    // checkerboard background
+    for (let y = 0; y < height; y += 32) {
+        for (let x = 0; x < width; x += 32) {
+            ctx.fillStyle = ((x + y) / 32) % 2 === 0 ? '#18191c' : '#202124';
+            ctx.fillRect(x, y, 32, 32);
+        }
+    }
 
     // rounded border
     ctx.strokeStyle = '#222';
