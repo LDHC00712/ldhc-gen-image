@@ -16,7 +16,7 @@ app.get('/gen-image', async (req, res) => {
     // กรอบโค้งมนบางๆ
     ctx.save();
     ctx.strokeStyle = '#444';
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 4;
     ctx.beginPath();
     ctx.moveTo(8, 16);
     ctx.arcTo(8, 8, 16, 8, 12);
@@ -39,7 +39,7 @@ app.get('/gen-image', async (req, res) => {
         ctx.beginPath();
         ctx.arc(avatarX, avatarY, avatarR, 0, Math.PI * 2, true);
         ctx.strokeStyle = '#444';
-        ctx.lineWidth = 2.5;
+        ctx.lineWidth = 4;
         ctx.shadowColor = 'transparent';
         ctx.shadowBlur = 0;
         ctx.stroke();
@@ -69,7 +69,7 @@ app.get('/gen-image', async (req, res) => {
         ctx.beginPath();
         ctx.arc(avatarX, avatarY, avatarR, 0, Math.PI * 2, true);
         ctx.strokeStyle = '#444';
-        ctx.lineWidth = 2.5;
+        ctx.lineWidth = 4;
         ctx.shadowColor = 'transparent';
         ctx.shadowBlur = 0;
         ctx.stroke();
