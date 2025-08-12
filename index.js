@@ -2,8 +2,6 @@ const express = require('express');
 const { createCanvas, loadImage, registerFont } = require('@napi-rs/canvas');
 const app = express();
 
-// ถ้ามีฟอนต์สวยๆในเครื่อง สามารถ registerFont ได้ เช่น registerFont('path/to/font.ttf', { family: 'CustomFont' });
-
 app.get('/gen-image', async (req, res) => {
     const { avatar, username, start, end } = req.query;
     if (!avatar || !username || !start || !end) {
