@@ -13,6 +13,16 @@ app.get('/gen-image', async (req, res) => {
     const canvas = createCanvas(width, height);
     const ctx = canvas.getContext('2d');
 
+    // วาดภาพพื้นหลัง (background.png)
+    try {
+        const bgImg = await loadImage('background.png');
+        ctx.drawImage(bgImg, 0, 0, width, height);
+    } catch (e) {
+        // ถ้าโหลดภาพไม่ได้ ให้พื้นหลังดำ
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, width, height);
+    }
+
     // กรอบโค้งมนบางๆ
     ctx.save();
     ctx.strokeStyle = '#444';
