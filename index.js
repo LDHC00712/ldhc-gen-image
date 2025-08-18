@@ -13,14 +13,41 @@ app.get('/gen-image', async (req, res) => {
     const canvas = createCanvas(width, height);
     const ctx = canvas.getContext('2d');
 
-    // วาดภาพพื้นหลัง (background.png)
+    // วาดภาพพื้นหลัง (backgrounds.png) เฉพาะในกรอบโค้งมน
     try {
         const bgImg = await loadImage('backgrounds.png');
+        ctx.save();
+        // วาด path กรอบโค้งมน
+        ctx.beginPath();
+        ctx.moveTo(8, 16);
+        ctx.arcTo(8, 8, 16, 8, 12);
+        ctx.lineTo(width - 16, 8);
+        ctx.arcTo(width - 8, 8, width - 8, 16, 12);
+        ctx.lineTo(width - 8, height - 16);
+        ctx.arcTo(width - 8, height - 8, width - 16, height - 8, 12);
+        ctx.lineTo(16, height - 8);
+        ctx.arcTo(8, height - 8, 8, height - 16, 12);
+        ctx.closePath();
+        ctx.clip();
         ctx.drawImage(bgImg, 0, 0, width, height);
+        ctx.restore();
     } catch (e) {
-        // ถ้าโหลดภาพไม่ได้ ให้พื้นหลังดำ
+        // ถ้าโหลดภาพไม่ได้ ให้พื้นหลังดำในกรอบ
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(8, 16);
+        ctx.arcTo(8, 8, 16, 8, 12);
+        ctx.lineTo(width - 16, 8);
+        ctx.arcTo(width - 8, 8, width - 8, 16, 12);
+        ctx.lineTo(width - 8, height - 16);
+        ctx.arcTo(width - 8, height - 8, width - 16, height - 8, 12);
+        ctx.lineTo(16, height - 8);
+        ctx.arcTo(8, height - 8, 8, height - 16, 12);
+        ctx.closePath();
+        ctx.clip();
         ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, width, height);
+        ctx.restore();
     }
 
     // กรอบโค้งมนบางๆ
