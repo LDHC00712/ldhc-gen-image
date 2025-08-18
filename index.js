@@ -15,7 +15,7 @@ app.get('/gen-image', async (req, res) => {
 
     // วาดภาพพื้นหลัง (background.png)
     try {
-        const bgImg = await loadImage('background.png');
+        const bgImg = await loadImage('backgrounds.png');
         ctx.drawImage(bgImg, 0, 0, width, height);
     } catch (e) {
         // ถ้าโหลดภาพไม่ได้ ให้พื้นหลังดำ
